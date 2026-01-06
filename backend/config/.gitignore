@@ -1,0 +1,17 @@
+# Ignore all JSON files except package.json
+*.json
+!package.json
+
+# Specifically ignore service account credentials
+google-service-account.json
+
+
+
+
+
+
+
+
+
+
+

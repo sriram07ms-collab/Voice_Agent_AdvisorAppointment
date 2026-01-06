@@ -1,0 +1,70 @@
+[
+  {
+    "id": "5cf3dba6-ae41-451b-bb7b-7737e43987c9",
+    "bookingCode": "NL-H743",
+    "topic": "KYC/Onboarding",
+    "preferredTime": "11am",
+    "selectedSlot": {
+      "id": "slot-2026-01-05-9",
+      "startTime": "2026-01-05T03:30:00.000Z",
+      "endTime": "2026-01-05T04:30:00.000Z",
+      "status": "booked",
+      "bookingCode": "NL-H743"
+    },
+    "status": "tentative",
+    "timezone": "IST",
+    "createdAt": "2026-01-04T12:41:50.970Z",
+    "updatedAt": "2026-01-04T12:41:53.875Z",
+    "secureUrl": "/booking/NL-H743",
+    "expiresAt": "2026-01-05T12:41:50.970Z",
+    "calendarHoldId": "1mlouokb9ugohs7q7tjp3pkhio",
+    "notesDocId": "8",
+    "emailDraftId": "r-7259947222662768990"
+  },
+  {
+    "id": "8cd81689-09cb-4979-88cf-0dbebbbf1869",
+    "bookingCode": "NL-R838",
+    "topic": "KYC/Onboarding",
+    "preferredDate": "2026-01-06T00:00:00.000Z",
+    "preferredTime": "9 AM",
+    "selectedSlot": {
+      "id": "slot-2026-01-06-9",
+      "startTime": "2026-01-06T03:30:00.000Z",
+      "endTime": "2026-01-06T04:30:00.000Z",
+      "status": "booked",
+      "bookingCode": "NL-R838"
+    },
+    "status": "tentative",
+    "timezone": "IST",
+    "createdAt": "2026-01-04T17:05:17.447Z",
+    "updatedAt": "2026-01-04T17:05:21.155Z",
+    "secureUrl": "/booking/NL-R838",
+    "expiresAt": "2026-01-05T17:05:17.447Z",
+    "calendarHoldId": "rjd5cqbdd3964joibkfbu7rjk8",
+    "notesDocId": "9",
+    "emailDraftId": "r-5443578902297081720"
+  },
+  {
+    "id": "c8950566-5bea-442b-bdd9-818c17a433f3",
+    "bookingCode": "NL-I557",
+    "topic": "KYC/Onboarding",
+    "preferredDate": "2026-01-06T00:00:00.000Z",
+    "preferredTime": "11 AM",
+    "selectedSlot": {
+      "id": "slot-2026-01-06-10",
+      "startTime": "2026-01-06T04:30:00.000Z",
+      "endTime": "2026-01-06T05:30:00.000Z",
+      "status": "booked",
+      "bookingCode": "NL-I557"
+    },
+    "status": "tentative",
+    "timezone": "IST",
+    "createdAt": "2026-01-04T18:03:57.430Z",
+    "updatedAt": "2026-01-04T18:04:00.122Z",
+    "secureUrl": "/booking/NL-I557",
+    "expiresAt": "2026-01-05T18:03:57.431Z",
+    "calendarHoldId": "h258r1mivvomjb51kosbsccpco",
+    "notesDocId": "10",
+    "emailDraftId": "r-2997222516660125423"
+  }
+]
