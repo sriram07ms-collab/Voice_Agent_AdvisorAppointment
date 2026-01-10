@@ -1,294 +1,213 @@
-# Voice Agent: Advisor Appointment Scheduler
+# Voice Agent Advisor Appointment App
 
-A voice-powered appointment scheduling system for Groww advisors, enabling users to book, reschedule, or cancel consultation appointments through natural voice conversation.
+A full-stack voice-enabled appointment scheduling application with real-time WebSocket communication, speech-to-text, and text-to-speech capabilities.
 
-## 🎯 Project Overview
+## Features
 
-This application helps users schedule advisor consultations for topics like KYC/Onboarding, SIP/Mandates, Statements/Tax Docs, Withdrawals & Timelines, and Account Changes/Nominee. The system uses voice interaction to provide a seamless booking experience while maintaining compliance and security standards.
+- 🎤 **Voice Interaction**: Real-time voice conversation using WebSocket streaming
+- 📅 **Appointment Booking**: Intelligent calendar slot management with availability tracking
+- 🔄 **Reschedule & Cancel**: Support for rescheduling and canceling existing bookings
+- 💾 **Persistent Storage**: File-based storage for booking data
+- 🎯 **Intent Recognition**: AI-powered conversation flow with Groq integration
+- 🛡️ **Guardrails**: Investment advice restrictions and PII detection
+- 📱 **Modern UI**: ChatGPT-like interface with welcome messages
 
-## ✨ Key Features
+## Tech Stack
 
-- **5 Core Intents**: Book new, reschedule, cancel, "what to prepare," check availability
-- **Voice-First Interface**: Natural conversation flow with voice input/output
-- **Compliant Pre-booking**: Disclaimer and educational content (no investment advice)
-- **MCP Integrations**: Calendar holds, Notes/Doc records, Email drafts
-- **Secure Booking**: Booking codes and secure URLs for contact details (no PII on call)
-- **IST Timezone**: All times displayed and managed in Indian Standard Time
-- **Groww Theme**: UI/UX aligned with Groww's official design system
+### Backend
+- **Node.js** with TypeScript
+- **Express.js** for REST API
+- **WebSocket (ws)** for real-time voice streaming
+- **Groq** for AI conversation processing
+- **ElevenLabs** for Text-to-Speech (TTS)
+- **Google Cloud Speech-to-Text** (optional, configurable)
+- **Winston** for structured logging
 
-## 🏗️ Project Structure
+### Frontend
+- **Next.js** with React
+- **TypeScript**
+- **WebSocket Client** for voice streaming
+- **Modern UI/UX** with responsive design
+
+## Project Structure
 
 ```
 Voice_Agent_AdvisorAppointment/
-│
-├── frontend/                          # Next.js frontend application
-│   ├── app/                           # Next.js App Router
-│   │   ├── layout.tsx                # Root layout with Groww theme
-│   │   ├── page.tsx                   # Main voice agent page
-│   │   ├── api/                       # API routes (if needed)
-│   │   └── booking/
-│   │       └── [code]/
-│   │           └── page.tsx           # Secure URL for contact details
-│   │
-│   ├── components/                    # React components
-│   │   ├── voice/                     # Voice UI components
-│   │   ├── conversation/              # Conversation flow components
-│   │   ├── booking/                   # Booking-related components
-│   │   ├── ui/                        # Reusable UI components (Groww theme)
-│   │   └── layout/                    # Layout components
-│   │
-│   ├── lib/                           # Utility libraries
-│   │   ├── voice/                     # Voice processing utilities
-│   │   ├── websocket/                 # WebSocket client
-│   │   ├── api/                       # API client
-│   │   └── utils/                     # General utilities
-│   │
-│   ├── store/                         # State management (Zustand)
-│   │   ├── conversationStore.ts
-│   │   ├── bookingStore.ts
-│   │   └── voiceStore.ts
-│   │
-│   ├── styles/                        # Styling
-│   │   ├── globals.css
-│   │   ├── groww-theme.css
-│   │   └── tailwind.config.ts
-│   │
-│   └── types/                         # TypeScript types
-│
-├── backend/                           # Node.js backend API
+├── backend/
 │   ├── src/
-│   │   ├── server.ts                  # Express/Fastify server setup
-│   │   ├── routes/                    # API routes
-│   │   │   ├── voice/                 # Voice endpoints
-│   │   │   ├── conversation/          # Conversation endpoints
-│   │   │   ├── booking/               # Booking endpoints
-│   │   │   └── health/                # Health check
-│   │   │
-│   │   ├── services/                  # Business logic
-│   │   │   ├── voice/                 # Voice processing services
-│   │   │   ├── conversation/          # Conversation orchestration
-│   │   │   ├── booking/               # Booking operations
-│   │   │   └── mcp/                   # MCP integrations
-│   │   │
-│   │   ├── models/                    # Data models
-│   │   ├── database/                  # Database configuration
-│   │   ├── middleware/                # Express middleware
-│   │   ├── utils/                     # Utility functions
-│   │   ├── types/                     # TypeScript types
-│   │   └── config/                    # Configuration
-│   │
-│   ├── prisma/                        # Prisma schema (if using Prisma)
-│   ├── tests/                         # Backend tests
+│   │   ├── routes/          # API routes
+│   │   ├── services/
+│   │   │   ├── voice/       # Voice processing (STT, TTS, WebSocket)
+│   │   │   ├── conversation/ # Conversation flow management
+│   │   │   ├── booking/     # Booking and slot management
+│   │   │   └── groq/        # AI service integration
+│   │   ├── utils/           # Utilities (logger, etc.)
+│   │   └── server.ts        # Main server file
+│   ├── data/                # Persistent storage (bookings.json)
+│   ├── logs/                # Application logs
 │   └── package.json
-│
-├── shared/                            # Shared code between frontend/backend
-│   ├── types/                         # Shared TypeScript types
-│   ├── constants/                     # Shared constants
-│   └── utils/                         # Shared utilities
-│
-├── docs/                              # Documentation
-│   ├── ARCHITECTURE.md                # Detailed architecture
-│   ├── API.md                         # API documentation
-│   └── DEPLOYMENT.md                  # Deployment guide
-│
-├── scripts/                           # Utility scripts
-│   ├── setup.sh
-│   ├── seed-db.ts
-│   └── generate-slots.ts
-│
-├── .gitignore
-├── README.md                          # This file
-├── package.json                       # Root package.json (workspace)
-├── docker-compose.yml                 # Local development setup
-└── .env.example                       # Environment variables template
+├── frontend/
+│   ├── components/
+│   │   ├── voice/           # Voice recording components
+│   │   └── chat/            # Chat interface components
+│   ├── app/                 # Next.js app directory
+│   └── package.json
+└── shared/
+    ├── constants/           # Shared constants (messages, topics)
+    ├── types/               # TypeScript type definitions
+    └── utils/               # Shared utilities
 ```
 
-## 🚀 Getting Started
+## Setup Instructions
 
 ### Prerequisites
-
-- Node.js 20+
-- PostgreSQL 15+
-- Redis (for caching and sessions)
+- Node.js (v18 or higher)
 - npm or yarn
+- ElevenLabs API key (for TTS)
+- Groq API key (for AI conversation)
+- Google Cloud credentials (optional, for STT/TTS fallback)
 
-### Installation
+### Backend Setup
 
-1. Clone the repository:
+1. Navigate to the backend directory:
 ```bash
-git clone <repository-url>
-cd Voice_Agent_AdvisorAppointment
+cd backend
 ```
 
 2. Install dependencies:
 ```bash
-# Install root dependencies
 npm install
-
-# Install frontend dependencies
-cd frontend && npm install
-
-# Install backend dependencies
-cd ../backend && npm install
 ```
 
-3. Set up environment variables:
-```bash
-# Copy example env files
-cp .env.example .env
-cp frontend/.env.example frontend/.env.local
-cp backend/.env.example backend/.env
+3. Create a `.env` file in the `backend` directory:
+```env
+PORT=3001
+GROQ_API_KEY=your_groq_api_key
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
+ELEVENLABS_VOICE_ID=your_voice_id
+GOOGLE_APPLICATION_CREDENTIALS=path/to/google-credentials.json
+MCP_ENABLED=false
 ```
 
-4. Configure environment variables (see `.env.example` for required variables)
-
-5. Set up database:
+4. Start the backend server:
 ```bash
-cd backend
-npx prisma migrate dev
-npx prisma db seed
-```
-
-6. Start development servers:
-```bash
-# Terminal 1: Backend
-cd backend
-npm run dev
-
-# Terminal 2: Frontend
-cd frontend
 npm run dev
 ```
 
-## 📋 Conversation Flow
+The backend will run on `http://localhost:3001`
 
-1. **Greet**: Welcome message
-2. **Disclaimer**: "This is informational, not investment advice"
-3. **Topic Selection**: 
-   - KYC/Onboarding
-   - SIP/Mandates
-   - Statements/Tax Docs
-   - Withdrawals & Timelines
-   - Account Changes/Nominee
-4. **Time Preference**: Collect day/time preference
-5. **Slot Offering**: Present 2 available slots
-6. **Confirmation**: User confirms slot
-7. **Booking Code**: Generate code (e.g., NL-A742)
-8. **MCP Operations**: 
-   - Create calendar hold
-   - Append to Notes/Doc
-   - Draft advisor email
-9. **Complete**: Provide booking code + secure URL
+### Frontend Setup
 
-## 🎨 Design System
-
-The application follows Groww's official design system:
-- Color palette matching Groww brand
-- Typography and spacing standards
-- Component library alignment
-- Responsive, mobile-first design
-
-## 🔒 Security & Compliance
-
-- **No PII on Call**: Phone, email, account numbers not collected during voice interaction
-- **Secure URLs**: Separate HTTPS endpoint for contact details
-- **Data Encryption**: All data encrypted at rest and in transit
-- **Compliance**: Mandatory disclaimer, no investment advice
-- **Audit Logs**: All operations logged for compliance
-
-## 🧪 Testing
-
-```bash
-# Run backend tests
-cd backend
-npm test
-
-# Run frontend tests
-cd frontend
-npm test
-
-# Run E2E tests
-npm run test:e2e
-```
-
-## 📦 Deployment
-
-See `docs/DEPLOYMENT.md` for detailed deployment instructions.
-
-### Quick Deploy
-
-1. Build frontend:
+1. Navigate to the frontend directory:
 ```bash
 cd frontend
-npm run build
 ```
 
-2. Build backend:
+2. Install dependencies:
 ```bash
-cd backend
-npm run build
+npm install
 ```
 
-3. Deploy using Docker:
+3. Create a `.env.local` file (if needed):
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+4. Start the frontend development server:
 ```bash
-docker-compose up -d
+npm run dev
 ```
 
-## 🛠️ Technology Stack
+The frontend will run on `http://localhost:3000`
 
-### Frontend
-- Next.js 14+ (App Router)
-- React 18+
-- Tailwind CSS
-- Zustand (state management)
-- Deepgram/AssemblyAI (voice transcription)
-- Socket.io (WebSocket)
+## API Endpoints
 
-### Backend
-- Node.js 20+
-- Express.js/Fastify
-- TypeScript
-- PostgreSQL (Prisma/Drizzle)
-- Redis
-- OpenAI GPT-4 (intent classification)
-- MCP SDK (Model Context Protocol)
+### Conversation
+- `POST /api/conversation/start` - Start a new conversation
+- `POST /api/conversation/message` - Send a message
+- `GET /api/conversation/history/:sessionId` - Get conversation history
 
-## 📚 Documentation
+### Voice
+- `WebSocket /api/voice/ws` - WebSocket endpoint for voice streaming
 
-- [Architecture Documentation](./ARCHITECTURE.md) - Detailed system architecture
-- [API Documentation](./docs/API.md) - API endpoints and schemas
-- [Deployment Guide](./docs/DEPLOYMENT.md) - Deployment instructions
+### Health
+- `GET /api/health/health` - Health check endpoint
 
-## 🤝 Contributing
+## Configuration
 
-1. Create a feature branch
-2. Make your changes
-3. Write/update tests
-4. Submit a pull request
+### Voice Providers
+The application supports multiple TTS/STT providers:
+- **ElevenLabs** (primary TTS)
+- **Google Cloud** (optional STT/TTS)
 
-## 📝 License
+Configure providers in the `.env` file. The system will use the configured provider without fallback.
 
-[Your License Here]
+### Booking Storage
+Bookings are stored in `backend/data/bookings.json`. The system automatically:
+- Tracks booked slots
+- Filters out unavailable slots
+- Supports rescheduling and cancellation
 
-## 👥 Team
+## Logging
 
-[Your Team Information]
+Backend logs are stored in `backend/logs/`:
+- `error-YYYY-MM-DD.log` - Error logs
+- `combined-YYYY-MM-DD.log` - All logs
 
-## 🔗 Links
+Logs use structured JSON format with timestamps, service names, and context.
 
-- [Groww Website](https://groww.in)
-- [Documentation](./docs/)
-- [Issues](https://github.com/your-repo/issues)
+## Development
 
+### Running in Development Mode
+Both servers support hot-reload:
+- Backend: `npm run dev` (uses tsx watch)
+- Frontend: `npm run dev` (Next.js dev server)
 
+### Building for Production
+- Backend: `npm run build` (if configured)
+- Frontend: `npm run build` then `npm start`
 
+## Features in Detail
 
+### Voice Streaming
+- Real-time audio streaming via WebSocket
+- Automatic transcription using STT
+- Voice responses using TTS
+- Session management for multiple users
 
+### Booking System
+- Intelligent slot generation based on date/time preferences
+- Automatic filtering of booked slots
+- Booking code generation for easy reference
+- Reschedule and cancel functionality
 
+### Conversation Flow
+- Multi-step conversation management
+- Intent recognition (book, reschedule, cancel, inquire)
+- Context-aware responses
+- Educational content for investment topics
 
+## Troubleshooting
 
+### Backend not starting
+- Check if port 3001 is available
+- Verify `.env` file exists and has required keys
+- Check logs in `backend/logs/` for errors
 
+### Voice not working
+- Verify API keys are set correctly
+- Check WebSocket connection in browser console
+- Review backend logs for STT/TTS errors
 
+### Import errors
+- Ensure all dependencies are installed (`npm install`)
+- Check TypeScript path mappings in `tsconfig.json`
+- Verify shared folder structure
 
+## License
 
+[Add your license here]
 
+## Contributing
+
+[Add contributing guidelines if needed]
