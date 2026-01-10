@@ -1,29 +1,29 @@
 # Dependencies
 node_modules/
-*/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+backend/logs/
+backend/logs/**/*
 
 # Build outputs
 dist/
 build/
 .next/
 out/
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-backend/.env
-frontend/.env.local
-
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# OS files
-.DS_Store
-Thumbs.db
+*.tsbuildinfo
 
 # IDE
 .vscode/
@@ -32,6 +32,20 @@ Thumbs.db
 *.swo
 *~
 
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend specific
+backend/data/bookings.json
+backend/data/*.json
+backend/backend_startup.log
+
+# Frontend specific
+frontend/.next/
+frontend/out/
+frontend/.vercel
+
 # Testing
 coverage/
 .nyc_output/
@@ -39,11 +53,4 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
-
-# Google Service Account credentials (Phase 2)
-backend/config/google-service-account.json
-backend/config/gmail-tokens.json
-backend/config/*.json
-!backend/config/package.json
-
-
+.cache/
