@@ -11,6 +11,7 @@ A full-stack voice-enabled appointment scheduling application with real-time Web
 - 🎯 **Intent Recognition**: AI-powered conversation flow with Groq integration
 - 🛡️ **Guardrails**: Investment advice restrictions and PII detection
 - 📱 **Modern UI**: ChatGPT-like interface with welcome messages
+- 🔗 **MCP Integrations**: Automated calendar holds, notes entries, and email drafts via Model Context Protocol
 
 ## Tech Stack
 
@@ -157,6 +158,22 @@ Bookings are stored in `backend/data/bookings.json`. The system automatically:
 - Filters out unavailable slots
 - Supports rescheduling and cancellation
 
+### MCP Integrations
+
+The application uses **Model Context Protocol (MCP)** to integrate with external services for automated booking workflows. When enabled (`MCP_ENABLED=true`), the system performs the following actions upon booking confirmation:
+
+- **Calendar Integration**: Creates calendar holds via Google Calendar API for tentative appointments
+- **Notes/Documentation**: Automatically records booking details in Google Sheets or similar documentation systems
+- **Email Drafts**: Generates email drafts via Gmail API for advisor notifications
+
+**Setup**: Configure MCP integrations by:
+1. Setting up Google Service Account credentials
+2. Enabling required Google APIs (Calendar, Sheets, Gmail)
+3. Configuring OAuth2 for Gmail access
+4. Setting `MCP_ENABLED=true` in `.env`
+
+See `backend/config/` for MCP configuration files and setup scripts.
+
 ## Logging
 
 Backend logs are stored in `backend/logs/`:
@@ -195,6 +212,24 @@ Both servers support hot-reload:
 - Intent recognition (book, reschedule, cancel, inquire)
 - Context-aware responses
 - Educational content for investment topics
+
+### Voice Agent Booking Workflow
+
+The voice agent streamlines the advisor appointment booking process through natural conversation:
+
+1. **Topic Collection**: Agent collects the consultation topic (e.g., KYC/Onboarding, SIP/Mandates, Statements/Tax Docs)
+2. **Time Preference**: User provides preferred date and time for the appointment
+3. **Slot Offering**: Agent offers two available time slots based on preferences
+4. **Confirmation**: User selects and confirms a slot
+5. **MCP Integrations** (automated upon confirmation):
+   - **Calendar Hold**: Creates a tentative calendar event for the selected slot
+   - **Notes Entry**: Records the booking details in notes/documentation system
+   - **Email Draft**: Generates a draft email for the advisor with booking information
+6. **Booking Completion**: User receives:
+   - A unique **booking code** (e.g., NL-A742) for reference
+   - A **secure link** to complete personal details (phone, email, account info) off-call
+
+This workflow ensures a seamless booking experience while maintaining security by collecting sensitive personal information through a secure web link rather than during the voice call.
 
 ## Troubleshooting
 
