@@ -1,6 +1,6 @@
 # Voice Agent Advisor Appointment App
 
-A full-stack voice-enabled appointment scheduling application with real-time WebSocket communication, speech-to-text, and text-to-speech capabilities.
+An intelligent voice-powered Adviosr appointment scheduling system that enables users to book, reschedule, or cancel advisor consultations through natural voice conversation. Built with real-time WebSocket streaming, the system provides seamless voice interaction with automatic speech recognition and text-to-speech responses, making appointment booking as simple as having a conversation.
 
 ## Features
 
