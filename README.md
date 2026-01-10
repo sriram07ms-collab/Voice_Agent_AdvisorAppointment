@@ -14,20 +14,29 @@ A full-stack voice-enabled appointment scheduling application with real-time Web
 
 ## Tech Stack
 
-### Backend
-- **Node.js** with TypeScript
-- **Express.js** for REST API
-- **WebSocket (ws)** for real-time voice streaming
-- **Groq** for AI conversation processing
-- **ElevenLabs** for Text-to-Speech (TTS)
-- **Google Cloud Speech-to-Text** (optional, configurable)
-- **Winston** for structured logging
-
 ### Frontend
-- **Next.js** with React
+- **Next.js 14** (App Router)
+- **React 18+**
 - **TypeScript**
-- **WebSocket Client** for voice streaming
-- **Modern UI/UX** with responsive design
+- **Tailwind CSS** for styling
+- **Axios** for HTTP requests
+- **Native WebSocket API** for real-time voice streaming
+- **date-fns** for date/time handling
+
+### Backend
+- **Node.js 20+**
+- **Express.js** for REST API
+- **TypeScript**
+- **WebSocket (ws)** for real-time voice streaming
+- **Groq SDK** for AI conversation processing and intent recognition
+- **ElevenLabs** for Text-to-Speech (TTS)
+- **Google Cloud Speech-to-Text** for Speech-to-Text (STT) - optional
+- **Google Cloud Text-to-Speech** for TTS fallback - optional
+- **Google APIs** (googleapis) for MCP integrations (Calendar, Gmail, Sheets)
+- **Custom File-based Logger** for structured logging (JSON format)
+- **Zod** for schema validation
+- **date-fns** for date/time handling
+- **File-based Storage** for booking data (JSON)
 
 ## Project Structure
 
