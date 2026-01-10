@@ -1,0 +1,133 @@
+name: Backend Release Package
+
+on:
+  push:
+    tags:
+      - 'backend-v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  create-release-package:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build TypeScript
+        run: npm run build
+      
+      - name: Create release package
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/backend-v}
+          VERSION=${VERSION:-${{ github.event.inputs.version }}}
+          
+          mkdir -p release/voice-agent-backend-$VERSION
+          
+          # Copy built files
+          cp -r dist release/voice-agent-backend-$VERSION/
+          
+          # Copy package files
+          cp package.json release/voice-agent-backend-$VERSION/
+          cp package-lock.json release/voice-agent-backend-$VERSION/ 2>/dev/null || true
+          
+          # Copy shared directory
+          cp -r ../shared release/voice-agent-backend-$VERSION/
+          
+          # Create startup scripts
+          cat > release/voice-agent-backend-$VERSION/start.sh << 'EOF'
+          #!/bin/bash
+          cd "$(dirname "$0")"
+          echo "Installing dependencies..."
+          npm install --production
+          echo "Starting server..."
+          node dist/server.js
+          EOF
+          
+          cat > release/voice-agent-backend-$VERSION/start.bat << 'EOF'
+          @echo off
+          cd /d "%~dp0"
+          echo Installing dependencies...
+          call npm install --production
+          echo Starting server...
+          node dist/server.js
+          EOF
+          
+          chmod +x release/voice-agent-backend-$VERSION/start.sh
+          
+          # Create README
+          cat > release/voice-agent-backend-$VERSION/README.md << EOF
+          # Voice Agent Backend - Version $VERSION
+          
+          ## Installation
+          
+          1. Extract this package
+          2. Install Node.js 20+ and npm
+          3. Create a \`.env\` file with required environment variables
+          4. Run the startup script:
+             - Linux/Mac: \`./start.sh\`
+             - Windows: \`start.bat\`
+          
+          ## Required Environment Variables
+          
+          \`.env\` file:
+          \`\`\`
+          PORT=3001
+          GROQ_API_KEY=your_groq_api_key
+          ELEVENLABS_API_KEY=your_elevenlabs_api_key
+          ELEVENLABS_VOICE_ID=your_voice_id
+          NEXT_PUBLIC_API_URL=http://your-frontend-url
+          \`\`\`
+          
+          ## Manual Start
+          
+          \`\`\`bash
+          npm install --production
+          node dist/server.js
+          \`\`\`
+          EOF
+          
+          # Create tarball
+          cd release
+          tar -czf voice-agent-backend-$VERSION.tar.gz voice-agent-backend-$VERSION/
+          zip -r voice-agent-backend-$VERSION.zip voice-agent-backend-$VERSION/
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release/voice-agent-backend-*.tar.gz
+            release/voice-agent-backend-*.zip
+          body: |
+            ## Backend Deployment Package
+            
+            Download the package for your platform and extract it. See README.md inside for deployment instructions.
+            
+            ### Quick Start
+            1. Extract the package
+            2. Create `.env` file with required variables
+            3. Run `./start.sh` (Linux/Mac) or `start.bat` (Windows)
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

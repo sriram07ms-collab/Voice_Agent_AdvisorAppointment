@@ -54,6 +54,71 @@ jobs:
           name: backend-build
           path: backend/dist
           retention-days: 7
+      
+      - name: Create deployment package
+        run: |
+          mkdir -p backend-package
+          cp -r dist backend-package/
+          cp package.json backend-package/
+          cp package-lock.json backend-package/ || true
+          # Copy shared directory
+          cp -r ../shared backend-package/
+          # Create startup script
+          echo '#!/bin/bash
+          cd "$(dirname "$0")"
+          npm install --production
+          node dist/server.js' > backend-package/start.sh
+          chmod +x backend-package/start.sh
+      
+      - name: Upload deployment package
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-deployment-package
+          path: backend-package
+          retention-days: 30
+      
+      - name: Create release notes
+        run: |
+          mkdir -p deployment-info
+          cat > deployment-info/BACKEND_DEPLOYMENT.md << 'EOF'
+          # Backend Deployment Package
+          
+          This package contains everything needed to run the backend server.
+          
+          ## Contents
+          - `dist/` - Compiled TypeScript code
+          - `package.json` - Dependencies
+          - `shared/` - Shared TypeScript types and constants
+          - `start.sh` - Startup script
+          
+          ## Self-Hosting Instructions
+          
+          1. Extract this package on your server
+          2. Install Node.js 20+ and npm
+          3. Create a `.env` file with required environment variables
+          4. Run: `chmod +x start.sh && ./start.sh`
+          
+          Or manually:
+          ```bash
+          npm install --production
+          node dist/server.js
+          ```
+          
+          ## Required Environment Variables
+          - PORT (default: 3001)
+          - GROQ_API_KEY
+          - ELEVENLABS_API_KEY
+          - ELEVENLABS_VOICE_ID
+          - NEXT_PUBLIC_API_URL (frontend URL for CORS)
+          EOF
+          cat deployment-info/BACKEND_DEPLOYMENT.md
+      
+      - name: Upload deployment info
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-deployment-info
+          path: deployment-info
+          retention-days: 30
 
   deploy:
     needs: build-and-test
