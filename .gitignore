@@ -54,3 +54,6 @@ coverage/
 *.tmp
 *.temp
 .cache/
+
+# GitHub Actions artifacts
+.github/artifacts/
