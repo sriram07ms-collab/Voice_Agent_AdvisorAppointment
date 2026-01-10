@@ -250,8 +250,4 @@ This workflow ensures a seamless booking experience while maintaining security b
 
 ## License
 
-[Add your license here]
-
-## Contributing
-
-[Add contributing guidelines if needed]
+License This project is for educational/skill demonstration purposes.
