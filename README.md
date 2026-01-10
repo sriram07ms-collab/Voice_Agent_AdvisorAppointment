@@ -248,6 +248,16 @@ This workflow ensures a seamless booking experience while maintaining security b
 - Check TypeScript path mappings in `tsconfig.json`
 - Verify shared folder structure
 
+## GitHub Hosting
+
+This project is configured for GitHub-native hosting:
+- **Frontend**: Automatically deployed to GitHub Pages
+- **Backend**: Build artifacts available for self-hosting
+
+See [GITHUB_HOSTING.md](./GITHUB_HOSTING.md) for complete deployment instructions.
+
+**Note**: GitHub does not host Node.js servers. The backend must be self-hosted on your own server or cloud VM.
+
 ## License
 
 License This project is for educational/skill demonstration purposes.
